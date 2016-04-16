@@ -1,0 +1,38 @@
+# Sensitive data & API keys
+SINAMOMKEN-gcm-info.txt
+app/google-services.json
+
+# built application files
+*.apk
+*.ap_
+
+# files for the dex VM
+*.dex
+
+# Java class files
+*.class
+
+# generated files
+bin/
+build/
+gen/
+target/
+
+# Local configuration files (sdk path, etc)
+/local.properties
+
+# Mac .DS_Store files
+.DS_Store
+
+# Proguard README
+proguard-project.txt
+
+# Android Studio and Gradle specific entries
+.gradle/
+.idea/
+*.iml
+
+# Default options
+/.idea/workspace.xml
+/.idea/libraries
+/captures
