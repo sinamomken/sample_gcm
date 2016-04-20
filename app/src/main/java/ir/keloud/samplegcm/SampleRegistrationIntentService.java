@@ -2,6 +2,9 @@ package ir.keloud.samplegcm;
 
 import android.app.IntentService;
 import android.content.Intent;
+import android.content.SharedPreferences;
+import android.preference.PreferenceManager;
+import android.support.v4.content.LocalBroadcastManager;
 import android.util.Log;
 
 import com.google.android.gms.gcm.GcmPubSub;
@@ -22,12 +25,17 @@ public class SampleRegistrationIntentService extends IntentService {
     private final static String TAG = SampleGcmListenerService.class.getSimpleName();
     private final static String[] TOPICS = {"global"};
 
+    public static final String SENT_TOKEN_TO_SERVER = "sentTokenToServer";
+    public static final String REGISTRATION_COMPLETE = "registrationComplete";
+
     public SampleRegistrationIntentService() {
         super(TAG);
     }
 
     @Override
     protected void onHandleIntent(Intent intent) {
+        SharedPreferences sharedPreferences = PreferenceManager.getDefaultSharedPreferences(this);
+
         try {
             // [START register_for_gcm]
 
@@ -47,15 +55,25 @@ public class SampleRegistrationIntentService extends IntentService {
             // Subscribe to topic channels
             subscribeTopics(token);
 
+            // You should store a boolean that indicates whether the generated token has been
+            // sent to your server. If the boolean is false, send the token to your server,
+            // otherwise your server should have already received the token.
+            sharedPreferences.edit().putBoolean(SENT_TOKEN_TO_SERVER, true).apply();
 
+            // [END register_for_gcm]
 
         } catch (Exception e) {
             Log.d(TAG, "Failed to complete token refresh", e);
             // If an exception happens while fetching the new token or updating our registration data
             // on a third-party server, this ensures that we'll attempt the update at a later time.
-            //sharedPreferences.edit().putBoolean(QuickstartPreferences.SENT_TOKEN_TO_SERVER, false).apply();
+            sharedPreferences.edit().putBoolean(SENT_TOKEN_TO_SERVER, false).apply();
         }
 
+        // Notify UI that registration has completed, so the progress indicator can be hidden.
+        // [START send_broadcast_to_main_activity]
+        Intent registrationComplete = new Intent(REGISTRATION_COMPLETE);
+        LocalBroadcastManager.getInstance(this).sendBroadcast(registrationComplete);
+        // [END send_broadcast_to_main_activity]
     }
 
     /**
@@ -67,7 +85,7 @@ public class SampleRegistrationIntentService extends IntentService {
      * @param token The new token.
      */
     private void sendRegistrationToServer(String token) {
-        // Add custom implementation, as needed.
+        //TODO: Add custom implementation, as needed.
     }
 
     /**
