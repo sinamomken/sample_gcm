@@ -51,7 +51,7 @@ public class MainActivity extends AppCompatActivity {
         };
 
         // Registering mRegistrationBroadcastReceiver
-        // TODO: Check whether this call is surplus?
+        // TODO: Check whether this call is a surplus?
         registerReceiver();
 
         // Check availability of Google Play Services APK

@@ -15,10 +15,6 @@
 
     <uses-permission android:name="ir.keloud.samplegcm.permission.C2D_MESSAGE" />
 
-    <android:uses-permission android:name="android.permission.WRITE_EXTERNAL_STORAGE" />
-    <android:uses-permission android:name="android.permission.READ_PHONE_STATE" />
-    <android:uses-permission android:name="android.permission.READ_EXTERNAL_STORAGE" />
-
     <!-- uses-permission android:name="android.permission.WAKE_LOCK" / -->
     <!-- [END gcm_permission] -->
     <application
