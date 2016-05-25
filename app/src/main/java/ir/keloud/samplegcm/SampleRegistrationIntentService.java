@@ -11,8 +11,13 @@ import com.google.android.gms.gcm.GcmPubSub;
 import com.google.android.gms.gcm.GoogleCloudMessaging;
 import com.google.android.gms.iid.InstanceID;
 
+import org.json.JSONException;
+import org.json.JSONObject;
+
 import java.io.IOException;
 
+import com.android.volley.*;
+import com.android.volley.toolbox.*;
 
 /**
  * An {@link IntentService} subclass for handling asynchronous task requests in
@@ -85,7 +90,35 @@ public class SampleRegistrationIntentService extends IntentService {
      * @param token The new token.
      */
     private void sendRegistrationToServer(String token) {
-        //TODO: Add custom implementation, as needed.
+        //TODO: Send token and keloud_user to gcm_server
+        String keloud_user = "sina-momken";
+
+        String url = "http://192.168.5.216:5000/notification/api/v1.0/register_device";
+        JSONObject reqJson = new JSONObject();
+        try {
+            reqJson.put("keloud_user", keloud_user);
+            reqJson.put("device_token", token);
+        }catch (JSONException e){
+            e.printStackTrace();
+        }
+
+        RequestQueue requestQueue = Volley.newRequestQueue(getApplicationContext());
+        JsonObjectRequest req = new JsonObjectRequest(Request.Method.POST, url, reqJson
+            , new Response.Listener<JSONObject>(){
+                @Override
+                public void onResponse(JSONObject res){
+                    Log.d(TAG+" Response", res.toString());
+                }
+            }, new Response.ErrorListener() {
+                @Override
+                public void onErrorResponse(VolleyError error) {
+                    Log.e(TAG+" Error", error.toString());
+                    error.printStackTrace();
+                }
+            }
+        );
+
+        requestQueue.add(req);
     }
 
     /**
